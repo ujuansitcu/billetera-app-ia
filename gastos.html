@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#0f0f0f" id="themeMetaColor"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Gastos"/>
+<title>Gastos</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+/* ===== THEMES ===== */
+[data-theme="dark"]{
+  --bg:#0f0f0f;--surface:#181818;--surface2:#222;--surface3:#2a2a2a;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --text:#f0f0f0;--muted:#777;--muted2:#444;
+  --accent:#c8f060;--accent-text:#0f0f0f;--accent-bg:rgba(200,240,96,0.12);
+  --danger:#ff6b6b;--danger-bg:rgba(255,107,107,0.12);
+  --success:#60d4a0;--tab-bg:#181818;
+}
+[data-theme="light"]{
+  --bg:#f5f5f3;--surface:#ffffff;--surface2:#f0efec;--surface3:#e8e7e3;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
+  --text:#1a1a1a;--muted:#888;--muted2:#bbb;
+  --accent:#2563eb;--accent-text:#fff;--accent-bg:rgba(37,99,235,0.08);
+  --danger:#dc2626;--danger-bg:rgba(220,38,38,0.08);
+  --success:#16a34a;--tab-bg:#ffffff;
+}
+[data-theme="pastel"]{
+  --bg:#fdf6f0;--surface:#fff8f3;--surface2:#fdeee4;--surface3:#fae0d0;
+  --border:rgba(180,120,80,0.12);--border2:rgba(180,120,80,0.22);
+  --text:#3d2b1f;--muted:#b08878;--muted2:#d4b8ac;
+  --accent:#e07050;--accent-text:#fff;--accent-bg:rgba(224,112,80,0.10);
+  --danger:#e05060;--danger-bg:rgba(224,80,96,0.10);
+  --success:#60a878;--tab-bg:#fff8f3;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;overscroll-behavior:none;transition:background .25s,color .25s}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;padding-bottom:calc(env(safe-area-inset-bottom)+20px)}
+
+/* TABS */
+.tabs{display:flex;background:var(--tab-bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.tab{flex:1;padding:14px 0;text-align:center;font-size:11px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;letter-spacing:.04em;text-transform:uppercase}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* VIEWS */
+.view{display:none;padding:16px}
+.view.active{display:block}
+
+/* MONTH ROW */
+.month-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.month-btn{background:var(--surface2);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;color:var(--text);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity .15s}
+.month-btn:active{opacity:.6}
+.month-label{font-size:14px;color:var(--muted)}
+
+/* HERO FONDO */
+.hero{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:12px}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
+.hero-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.hero-fondos-btn{font-size:11px;color:var(--accent);cursor:pointer;background:var(--accent-bg);border:none;border-radius:6px;padding:4px 10px;font-family:'DM Sans',sans-serif}
+.hero-fondos-btn:active{opacity:.7}
+.hero-amount{font-family:'DM Mono',monospace;font-size:36px;font-weight:400;letter-spacing:-1px;line-height:1}
+.hero-amount .cur{font-size:18px;color:var(--muted);margin-right:2px}
+.hero-sub{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.hero-fund-name{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.hero-total{font-size:11px;color:var(--muted)}
+.hero-total span{font-family:'DM Mono',monospace;color:var(--text)}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.metric{background:var(--surface);border-radius:10px;padding:12px;border:1px solid var(--border)}
+.metric .ml{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.metric .mv{font-size:15px;font-weight:500}
+
+/* CHART */
+.chart-card{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:14px}
+.chart-inner{display:flex;align-items:center;gap:14px}
+.chart-wrap{position:relative;width:130px;height:130px;flex-shrink:0}
+.legend{display:flex;flex-direction:column;gap:8px;flex:1;min-width:0}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:12px}
+.l-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.l-name{flex:1;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.l-pct{font-family:'DM Mono',monospace;font-size:11px;color:var(--text)}
+.no-data{text-align:center;padding:24px 0;color:var(--muted);font-size:13px}
+
+/* DAY LIST */
+.day-group{margin-bottom:12px}
+.day-header{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:5px 0;border-bottom:1px solid var(--border);margin-bottom:6px;display:flex;justify-content:space-between}
+.day-total{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted2)}
+.expense-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.expense-item:last-child{border-bottom:none}
+.e-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.e-info{flex:1;min-width:0}
+.e-type{font-size:13px;color:var(--text)}
+.e-desc{font-size:11px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.e-fund{font-size:10px;color:var(--muted2);margin-top:1px}
+.e-amount{font-family:'DM Mono',monospace;font-size:13px;color:var(--text);flex-shrink:0}
+.e-del{background:none;border:none;color:var(--muted2);font-size:18px;cursor:pointer;padding:1px 5px;border-radius:5px;line-height:1}
+.e-del:active{color:var(--danger);background:var(--danger-bg)}
+
+/* FORMS */
+.form-card{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:14px}
+.form-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:13px}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 12px;outline:none;-webkit-appearance:none;appearance:none;transition:border-color .15s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
+.field textarea{resize:none;height:58px;line-height:1.4}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23888' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn-primary{width:100%;margin-top:10px;background:var(--accent);color:var(--accent-text);border:none;border-radius:9px;padding:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s}
+.btn-primary:active{opacity:.75}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border2);border-radius:9px;padding:9px 14px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:opacity .15s}
+.btn-secondary:active{opacity:.7}
+.btn-danger-sm{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger-bg);border-radius:7px;padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer}
+.form-error{font-size:12px;color:var(--danger);margin-top:7px;display:none}
+.divider{height:1px;background:var(--border);margin:14px 0}
+.section-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+
+/* TIPOS LIST */
+.tipo-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.tipo-item:last-child{border-bottom:none}
+.tipo-color-btn{width:22px;height:22px;border-radius:5px;border:2px solid transparent;cursor:pointer;flex-shrink:0;transition:transform .15s}
+.tipo-color-btn:active{transform:scale(0.9)}
+.tipo-name-input{flex:1;background:none;border:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;padding:0}
+.tipo-name-input:focus{border-bottom:1px solid var(--accent)}
+.tipo-del{background:none;border:none;color:var(--muted2);font-size:17px;cursor:pointer;padding:2px 5px}
+.tipo-del:active{color:var(--danger)}
+
+/* COLOR GRID */
+.color-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:6px}
+.color-opt{width:100%;aspect-ratio:1;border-radius:5px;cursor:pointer;border:2.5px solid transparent;transition:border-color .15s,transform .1s}
+.color-opt.selected{border-color:var(--text)}
+.color-opt:active{transform:scale(.9)}
+
+/* THEMES */
+.theme-row{display:flex;gap:8px;margin-bottom:4px}
+.theme-opt{flex:1;border-radius:10px;border:2px solid var(--border2);padding:10px 6px;text-align:center;cursor:pointer;font-size:12px;transition:border-color .15s,opacity .15s}
+.theme-opt.selected{border-color:var(--accent);color:var(--accent)}
+.theme-opt:active{opacity:.7}
+.theme-preview{width:100%;height:20px;border-radius:5px;margin-bottom:6px}
+
+/* MODAL SHEET */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:flex;align-items:flex-end;justify-content:center;transition:opacity .2s}
+.modal-overlay.hidden{display:none}
+.modal{background:var(--surface);border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:430px;padding-bottom:calc(20px + env(safe-area-inset-bottom));max-height:85dvh;overflow-y:auto}
+.modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 16px}
+.modal h3{font-size:15px;font-weight:500;margin-bottom:14px}
+.modal-actions{display:flex;gap:8px;margin-top:12px}
+
+/* FONDO CARD IN MODAL */
+.fondo-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}
+.fondo-row:last-child{border-bottom:none}
+.fondo-icon{width:32px;height:32px;border-radius:50%;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.fondo-info{flex:1;min-width:0}
+.fondo-rname{font-size:13px;font-weight:500}
+.fondo-rbal{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)}
+.fondo-actions{display:flex;gap:6px}
+.fondo-badge{font-size:10px;background:var(--accent-bg);color:var(--accent);border-radius:4px;padding:2px 6px}
+.fondo-principal-btn{font-size:11px;background:var(--surface3);color:var(--muted);border:none;border-radius:6px;padding:4px 8px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.fondo-principal-btn.active{background:var(--accent-bg);color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="tabs">
+    <div class="tab active" data-tab="inicio">Inicio</div>
+    <div class="tab" data-tab="agregar">+ Gasto</div>
+    <div class="tab" data-tab="config">Config</div>
+  </div>
+
+  <!-- ===== INICIO ===== -->
+  <div class="view active" id="tab-inicio">
+    <div class="month-row">
+      <button class="month-btn" id="prevM">&#8592;</button>
+      <div class="month-label" id="monthLabel"></div>
+      <button class="month-btn" id="nextM">&#8594;</button>
+    </div>
+
+    <!-- HERO FONDO -->
+    <div class="hero">
+      <div class="hero-top">
+        <div class="hero-label" id="heroLabel">dinero disponible</div>
+        <button class="hero-fondos-btn" id="btnVerFondos">ver fondos ›</button>
+      </div>
+      <div class="hero-amount"><span class="cur">$</span><span id="heroAmount">0</span></div>
+      <div class="hero-sub">
+        <div class="hero-fund-name" id="heroFundName"></div>
+        <div class="hero-total">total: <span id="heroTotalFondos">$0</span></div>
+      </div>
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="ml">gastado este mes</div><div class="mv" id="metGastado">$0</div></div>
+      <div class="metric"><div class="ml">mayor tipo</div><div class="mv" id="metTop">—</div></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-inner" id="chartInner">
+        <div class="chart-wrap"><canvas id="pieChart" role="img" aria-label="Gráfico de torta por tipo de gasto"></canvas></div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="no-data" id="noChart" style="display:none">Sin gastos este mes</div>
+    </div>
+
+    <div id="dayList"></div>
+  </div>
+
+  <!-- ===== AGREGAR GASTO ===== -->
+  <div class="view" id="tab-agregar">
+    <div class="form-card">
+      <div class="form-title">registrar gasto</div>
+      <div class="field"><label>Tipo de gasto</label><select id="fTipo"><option value="">Elegir tipo...</option></select></div>
+      <div class="field"><label>Descripción (opcional)</label><textarea id="fDesc" placeholder="Ej: almuerzo con amigos..."></textarea></div>
+      <div class="form-row">
+        <div class="field"><label>Monto ($)</label><input type="number" id="fAmount" placeholder="0" min="0" step="any" inputmode="decimal"/></div>
+        <div class="field"><label>Fondo</label><select id="fFondo"><option value="">Sin especificar</option></select></div>
+      </div>
+      <div class="field"><label>Fecha</label><input type="date" id="fDate"/></div>
+      <div id="formError" class="form-error"></div>
+      <button class="btn-primary" id="btnAdd">registrar gasto</button>
+    </div>
+  </div>
+
+  <!-- ===== CONFIG ===== -->
+  <div class="view" id="tab-config">
+    <!-- TEMA -->
+    <div class="form-card">
+      <div class="form-title">tema de la app</div>
+      <div class="theme-row">
+        <div class="theme-opt" data-theme-opt="dark">
+          <div class="theme-preview" style="background:linear-gradient(135deg,#0f0f0f 50%,#c8f060 50%)"></div>
+          Dark
+        </div>
+        <div class="theme-opt" data-theme-opt="light">
+          <div class="theme-preview" style="background:linear-gradient(135deg,#f5f5f3 50%,#2563eb 50%)"></div>
+          Light
+        </div>
+        <div class="theme-opt" data-theme-opt="pastel">
+          <div class="theme-preview" style="background:linear-gradient(135deg,#fdf6f0 50%,#e07050 50%)"></div>
+          Pastel
+        </div>
+      </div>
+    </div>
+
+    <!-- TIPOS DE GASTO -->
+    <div class="form-card">
+      <div class="form-title">tipos de gasto</div>
+      <div id="tiposList"></div>
+      <div class="divider"></div>
+      <div class="section-title">nuevo tipo</div>
+      <div class="field"><label>Nombre</label><input type="text" id="cTipoNombre" placeholder="Ej: Salidas, Mascota..."/></div>
+      <div class="field"><label>Color</label><div class="color-grid" id="colorGrid"></div><input type="hidden" id="cTipoColor" value="#c8f060"/></div>
+      <button class="btn-primary" style="margin-top:8px" id="btnAddTipo">+ agregar tipo</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FONDOS -->
+<div class="modal-overlay hidden" id="modalFondos">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>mis fondos</h3>
+    <div id="fondosModalList"></div>
+    <div class="divider"></div>
+    <button class="btn-secondary" style="width:100%" id="btnNuevoFondo">+ nuevo fondo</button>
+  </div>
+</div>
+
+<!-- MODAL NUEVO FONDO -->
+<div class="modal-overlay hidden" id="modalNuevoFondo">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>nuevo fondo</h3>
+    <div class="field"><label>Nombre</label><input type="text" id="mfNombre" placeholder="Ej: Efectivo, Mercado Pago..."/></div>
+    <div class="field"><label>Emoji</label><input type="text" id="mfEmoji" placeholder="💵" maxlength="2"/></div>
+    <div class="field"><label>Saldo inicial ($)</label><input type="number" id="mfSaldo" placeholder="0" min="0" step="any" inputmode="decimal"/></div>
+    <div id="mfError" class="form-error"></div>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="btnCancelNuevoFondo">cancelar</button>
+      <button class="btn-primary" style="margin-top:0;flex:1" id="btnConfirmFondo">crear</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL INGRESO -->
+<div class="modal-overlay hidden" id="modalIngreso">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 id="miTitle">agregar ingreso</h3>
+    <div class="field"><label>Monto ($)</label><input type="number" id="miMonto" placeholder="0" min="0" step="any" inputmode="decimal"/></div>
+    <div class="field"><label>Descripción</label><input type="text" id="miDesc" placeholder="Ej: sueldo, transferencia..."/></div>
+    <div id="miError" class="form-error"></div>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="btnCancelIngreso">cancelar</button>
+      <button class="btn-primary" style="margin-top:0;flex:1" id="btnConfirmIngreso">agregar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR COLOR TIPO -->
+<div class="modal-overlay hidden" id="modalEditColor">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>elegir color</h3>
+    <div class="color-grid" id="editColorGrid"></div>
+    <input type="hidden" id="editColorTipoId"/>
+    <input type="hidden" id="editColorVal"/>
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="btn-secondary" id="btnCancelEditColor">cancelar</button>
+      <button class="btn-primary" style="margin-top:0;flex:1" id="btnConfirmEditColor">aplicar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== STORAGE =====
+const S={get:k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
+
+// ===== STATE =====
+let now=new Date(),cy=now.getFullYear(),cm=now.getMonth(),chart=null,ingresoFondoId=null;
+
+const PALETTE=['#c8f060','#60d4f0','#f0a060','#f060a0','#a060f0','#60f0b8','#f0e060','#ff6b6b','#60a8f0','#f09060','#b060f0','#60f060','#f06080','#80f0c0','#f0c060','#6080f0','#50c8a0','#e8a030','#c060d0','#40b8e0'];
+const MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const DAYS=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
+// ===== DATA =====
+function getTipos(){return S.get('tipos')||[{id:'t1',name:'Comida',color:'#c8f060'},{id:'t2',name:'Transporte',color:'#60d4f0'},{id:'t3',name:'Vivienda',color:'#f0a060'},{id:'t4',name:'Salud',color:'#f060a0'},{id:'t5',name:'Entretenimiento',color:'#a060f0'},{id:'t6',name:'Otros',color:'#888'}]}
+function saveTipos(t){S.set('tipos',t)}
+function getFondos(){return S.get('fondos')||[]}
+function saveFondos(f){S.set('fondos',f)}
+function getFondoPrincipalId(){return S.get('fondoPrincipal')}
+function setFondoPrincipalId(id){S.set('fondoPrincipal',id)}
+function monthKey(){return `${cy}-${String(cm+1).padStart(2,'0')}`}
+function getGastos(){return S.get('gastos_'+monthKey())||[]}
+function saveGastos(g){S.set('gastos_'+monthKey(),g)}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+function fmt(n){return Number(n).toLocaleString('es-AR',{minimumFractionDigits:0,maximumFractionDigits:0})}
+function tipoById(id){return getTipos().find(t=>t.id===id)||{name:id,color:'#888'}}
+function fondoById(id){return getFondos().find(f=>f.id===id)}
+
+// ===== THEME =====
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  S.set('theme',t);
+  const colors={dark:'#0f0f0f',light:'#f5f5f3',pastel:'#fdf6f0'};
+  document.getElementById('themeMetaColor').setAttribute('content',colors[t]||'#0f0f0f');
+  document.querySelectorAll('.theme-opt').forEach(el=>el.classList.toggle('selected',el.dataset.themeOpt===t));
+}
+applyTheme(S.get('theme')||'dark');
+document.querySelectorAll('.theme-opt').forEach(el=>el.addEventListener('click',()=>applyTheme(el.dataset.themeOpt)));
+
+// ===== TABS =====
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-'+tab.dataset.tab).classList.add('active');
+    if(tab.dataset.tab==='inicio')renderInicio();
+    if(tab.dataset.tab==='agregar')renderFormSelects();
+    if(tab.dataset.tab==='config')renderConfig();
+  });
+});
+
+// ===== INICIO =====
+function renderInicio(){
+  document.getElementById('monthLabel').textContent=`${MONTHS[cm]} ${cy}`;
+
+  // Hero fondo
+  const fondos=getFondos();
+  const totalFondos=fondos.reduce((s,f)=>s+f.balance,0);
+  let fpId=getFondoPrincipalId();
+  let fp=fondos.find(f=>f.id===fpId);
+  if(!fp&&fondos.length){fp=fondos[0];setFondoPrincipalId(fp.id)}
+  document.getElementById('heroAmount').textContent=fp?fmt(fp.balance):fmt(totalFondos);
+  document.getElementById('heroLabel').textContent=fp?'fondo disponible':'dinero disponible';
+  document.getElementById('heroFundName').innerHTML=fp?`<span>${fp.emoji||'💰'}</span> ${fp.name}`:'todos los fondos';
+  document.getElementById('heroTotalFondos').textContent='$'+fmt(totalFondos);
+
+  // Gastos
+  const gastos=getGastos();
+  const total=gastos.reduce((s,g)=>s+g.amount,0);
+  document.getElementById('metGastado').textContent='$'+fmt(total);
+  const byTipo={};
+  gastos.forEach(g=>{byTipo[g.tipoId]=(byTipo[g.tipoId]||0)+g.amount});
+  const cats=Object.entries(byTipo).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('metTop').textContent=cats.length?tipoById(cats[0][0]).name:'—';
+
+  // Chart
+  const ci=document.getElementById('chartInner'),nc=document.getElementById('noChart');
+  if(cats.length){
+    ci.style.display='flex';nc.style.display='none';
+    renderChart(cats,total);
+    document.getElementById('legend').innerHTML=cats.map(([tid,amt])=>{
+      const t=tipoById(tid);
+      return `<div class="legend-item"><span class="l-dot" style="background:${t.color}"></span><span class="l-name">${t.name}</span><span class="l-pct">${total>0?Math.round(amt/total*100):0}%</span></div>`;
+    }).join('');
+  }else{ci.style.display='none';nc.style.display='block';if(chart){chart.destroy();chart=null}}
+
+  // Day list
+  const byDay={};
+  gastos.forEach(g=>{const d=(g.date||new Date().toISOString()).slice(0,10);if(!byDay[d])byDay[d]=[];byDay[d].push(g)});
+  const days=Object.keys(byDay).sort((a,b)=>b.localeCompare(a));
+  const listEl=document.getElementById('dayList');
+  if(!days.length){listEl.innerHTML='<div class="no-data">Agregá tu primer gasto</div>';return}
+  listEl.innerHTML=days.map(day=>{
+    const items=byDay[day];
+    const dayTotal=items.reduce((s,g)=>s+g.amount,0);
+    const d=new Date(day+'T12:00:00');
+    return `<div class="day-group">
+      <div class="day-header"><span>${DAYS[d.getDay()]} ${d.getDate()}</span><span class="day-total">$${fmt(dayTotal)}</span></div>
+      ${items.map(g=>{
+        const t=tipoById(g.tipoId);
+        const f=g.fondoId?fondoById(g.fondoId):null;
+        return `<div class="expense-item">
+          <span class="e-dot" style="background:${t.color}"></span>
+          <div class="e-info">
+            <div class="e-type">${t.name}</div>
+            ${g.desc?`<div class="e-desc">${g.desc}</div>`:''}
+            ${f?`<div class="e-fund">${f.emoji||'💰'} ${f.name}</div>`:''}
+          </div>
+          <span class="e-amount">$${fmt(g.amount)}</span>
+          <button class="e-del" data-id="${g.id}">×</button>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+  listEl.querySelectorAll('.e-del').forEach(btn=>btn.addEventListener('click',()=>deleteGasto(btn.dataset.id)));
+}
+
+function renderChart(cats,total){
+  const ctx=document.getElementById('pieChart').getContext('2d');
+  if(chart)chart.destroy();
+  chart=new Chart(ctx,{type:'doughnut',data:{labels:cats.map(c=>tipoById(c[0]).name),datasets:[{data:cats.map(c=>c[1]),backgroundColor:cats.map(c=>tipoById(c[0]).color),borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'66%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`$${fmt(c.parsed)} (${total>0?Math.round(c.parsed/total*100):0}%)`}}}}});
+}
+
+function deleteGasto(id){
+  const gastos=getGastos(),g=gastos.find(x=>x.id===id);
+  if(!g)return;
+  if(g.fondoId){const fondos=getFondos(),f=fondos.find(x=>x.id===g.fondoId);if(f){f.balance+=g.amount;f.history=f.history||[];f.history.push({type:'ingreso',amount:g.amount,desc:'Gasto eliminado',date:new Date().toISOString()});saveFondos(fondos)}}
+  saveGastos(gastos.filter(x=>x.id!==id));
+  renderInicio();
+}
+
+document.getElementById('prevM').addEventListener('click',()=>{cm--;if(cm<0){cm=11;cy--}renderInicio()});
+document.getElementById('nextM').addEventListener('click',()=>{cm++;if(cm>11){cm=0;cy++}renderInicio()});
+
+// ===== MODAL FONDOS =====
+document.getElementById('btnVerFondos').addEventListener('click',()=>{renderFondosModal();document.getElementById('modalFondos').classList.remove('hidden')});
+document.getElementById('modalFondos').addEventListener('click',e=>{if(e.target===document.getElementById('modalFondos'))document.getElementById('modalFondos').classList.add('hidden')});
+
+function renderFondosModal(){
+  const fondos=getFondos();
+  const fpId=getFondoPrincipalId();
+  document.getElementById('fondosModalList').innerHTML=fondos.length?fondos.map(f=>`
+    <div class="fondo-row">
+      <div class="fondo-icon">${f.emoji||'💰'}</div>
+      <div class="fondo-info">
+        <div class="fondo-rname">${f.name}</div>
+        <div class="fondo-rbal">$${fmt(f.balance)}</div>
+      </div>
+      <div class="fondo-actions">
+        <button class="fondo-principal-btn${f.id===fpId?' active':''}" data-setprincipal="${f.id}">${f.id===fpId?'★ principal':'principal'}</button>
+        <button class="btn-secondary" style="font-size:11px;padding:5px 8px" data-ingresofondo="${f.id}">+ ingreso</button>
+        <button class="btn-danger-sm" data-delfondo="${f.id}">×</button>
+      </div>
+    </div>`).join(''):'<div class="no-data">No tenés fondos</div>';
+  document.querySelectorAll('[data-setprincipal]').forEach(btn=>btn.addEventListener('click',()=>{setFondoPrincipalId(btn.dataset.setprincipal);renderFondosModal();renderInicio()}));
+  document.querySelectorAll('[data-ingresofondo]').forEach(btn=>btn.addEventListener('click',()=>{ingresoFondoId=btn.dataset.ingresofondo;openModalIngreso(btn.dataset.ingresofondo)}));
+  document.querySelectorAll('[data-delfondo]').forEach(btn=>btn.addEventListener('click',()=>{saveFondos(getFondos().filter(f=>f.id!==btn.dataset.delfondo));renderFondosModal();renderInicio()}));
+}
+
+document.getElementById('btnNuevoFondo').addEventListener('click',()=>{
+  ['mfNombre','mfEmoji','mfSaldo'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('mfError').style.display='none';
+  document.getElementById('modalFondos').classList.add('hidden');
+  document.getElementById('modalNuevoFondo').classList.remove('hidden');
+});
+document.getElementById('btnCancelNuevoFondo').addEventListener('click',()=>{document.getElementById('modalNuevoFondo').classList.add('hidden');document.getElementById('modalFondos').classList.remove('hidden');renderFondosModal()});
+document.getElementById('btnConfirmFondo').addEventListener('click',()=>{
+  const name=document.getElementById('mfNombre').value.trim();
+  const emoji=document.getElementById('mfEmoji').value.trim()||'💰';
+  const saldo=parseFloat(document.getElementById('mfSaldo').value)||0;
+  const errEl=document.getElementById('mfError');
+  if(!name){errEl.textContent='Ingresá un nombre.';errEl.style.display='block';return}
+  const fondos=getFondos();
+  const newF={id:uid(),name,emoji,balance:saldo,history:saldo>0?[{type:'ingreso',amount:saldo,desc:'Saldo inicial',date:new Date().toISOString()}]:[]};
+  fondos.push(newF);
+  saveFondos(fondos);
+  if(!getFondoPrincipalId())setFondoPrincipalId(newF.id);
+  document.getElementById('modalNuevoFondo').classList.add('hidden');
+  document.getElementById('modalFondos').classList.remove('hidden');
+  renderFondosModal();renderInicio();
+});
+
+function openModalIngreso(fondoId){
+  const f=fondoById(fondoId);
+  document.getElementById('miTitle').textContent=`agregar a ${f?f.name:'fondo'}`;
+  document.getElementById('miMonto').value='';document.getElementById('miDesc').value='';
+  document.getElementById('miError').style.display='none';
+  document.getElementById('modalFondos').classList.add('hidden');
+  document.getElementById('modalIngreso').classList.remove('hidden');
+}
+document.getElementById('btnCancelIngreso').addEventListener('click',()=>{document.getElementById('modalIngreso').classList.add('hidden');document.getElementById('modalFondos').classList.remove('hidden');renderFondosModal()});
+document.getElementById('btnConfirmIngreso').addEventListener('click',()=>{
+  const monto=parseFloat(document.getElementById('miMonto').value);
+  const desc=document.getElementById('miDesc').value.trim()||'Ingreso';
+  const errEl=document.getElementById('miError');
+  if(!monto||monto<=0){errEl.textContent='Ingresá un monto válido.';errEl.style.display='block';return}
+  const fondos=getFondos(),f=fondos.find(x=>x.id===ingresoFondoId);
+  if(f){f.balance+=monto;f.history=f.history||[];f.history.push({type:'ingreso',amount:monto,desc,date:new Date().toISOString()});saveFondos(fondos)}
+  document.getElementById('modalIngreso').classList.add('hidden');
+  document.getElementById('modalFondos').classList.remove('hidden');
+  renderFondosModal();renderInicio();
+});
+
+// ===== AGREGAR GASTO =====
+function renderFormSelects(){
+  const tipos=getTipos(),fondos=getFondos();
+  document.getElementById('fTipo').innerHTML='<option value="">Elegir tipo...</option>'+tipos.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
+  document.getElementById('fFondo').innerHTML='<option value="">Sin especificar</option>'+fondos.map(f=>`<option value="${f.id}">${f.emoji||'💰'} ${f.name} — $${fmt(f.balance)}</option>`).join('');
+  document.getElementById('fDate').value=new Date().toISOString().slice(0,10);
+}
+document.getElementById('btnAdd').addEventListener('click',()=>{
+  const tipoId=document.getElementById('fTipo').value;
+  const desc=document.getElementById('fDesc').value.trim();
+  const amount=parseFloat(document.getElementById('fAmount').value);
+  const fondoId=document.getElementById('fFondo').value;
+  const date=document.getElementById('fDate').value;
+  const errEl=document.getElementById('formError');
+  if(!tipoId){errEl.textContent='Elegí un tipo de gasto.';errEl.style.display='block';return}
+  if(!amount||amount<=0){errEl.textContent='Ingresá un monto válido.';errEl.style.display='block';return}
+  if(fondoId){
+    const fondos=getFondos(),f=fondos.find(x=>x.id===fondoId);
+    if(f&&f.balance<amount){errEl.textContent=`Saldo insuficiente en ${f.name} ($${fmt(f.balance)}).`;errEl.style.display='block';return}
+    if(f){f.balance-=amount;f.history=f.history||[];f.history.push({type:'gasto',amount,desc:desc||tipoById(tipoId).name,date:new Date().toISOString()});saveFondos(fondos)}
+  }
+  errEl.style.display='none';
+  const dateObj=new Date((date||new Date().toISOString().slice(0,10))+'T12:00:00');
+  const gKey=`${dateObj.getFullYear()}-${String(dateObj.getMonth()+1).padStart(2,'0')}`;
+  const gastos=S.get('gastos_'+gKey)||[];
+  gastos.push({id:uid(),tipoId,desc,amount,fondoId,date:date||new Date().toISOString().slice(0,10)});
+  S.set('gastos_'+gKey,gastos);
+  ['fDesc','fAmount'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fTipo').value='';
+  document.getElementById('fFondo').value='';
+  document.getElementById('fDate').value=new Date().toISOString().slice(0,10);
+  cy=dateObj.getFullYear();cm=dateObj.getMonth();
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelector('[data-tab="inicio"]').classList.add('active');
+  document.getElementById('tab-inicio').classList.add('active');
+  renderInicio();
+});
+
+// ===== CONFIG =====
+function buildColorGrid(gridId,hiddenId,currentColor){
+  document.getElementById(gridId).innerHTML=PALETTE.map(c=>`<div class="color-opt${c===currentColor?' selected':''}" style="background:${c}" data-color="${c}"></div>`).join('');
+  document.querySelectorAll('#'+gridId+' .color-opt').forEach(el=>el.addEventListener('click',()=>{document.getElementById(hiddenId).value=el.dataset.color;document.querySelectorAll('#'+gridId+' .color-opt').forEach(x=>x.classList.remove('selected'));el.classList.add('selected')}));
+}
+
+function renderConfig(){
+  const tipos=getTipos();
+  document.getElementById('tiposList').innerHTML=tipos.map(t=>`
+    <div class="tipo-item">
+      <button class="tipo-color-btn" style="background:${t.color}" data-editcolor="${t.id}" title="Cambiar color"></button>
+      <input class="tipo-name-input" value="${t.name}" data-tipoid="${t.id}" maxlength="20"/>
+      <button class="tipo-del" data-deltipo="${t.id}">×</button>
+    </div>`).join('')||'<div style="color:var(--muted);font-size:13px;padding:8px 0">Sin tipos</div>';
+  document.querySelectorAll('.tipo-name-input').forEach(inp=>{
+    inp.addEventListener('change',()=>{const tipos=getTipos(),t=tipos.find(x=>x.id===inp.dataset.tipoid);if(t){t.name=inp.value.trim()||t.name;saveTipos(tipos)}});
+  });
+  document.querySelectorAll('[data-deltipo]').forEach(btn=>btn.addEventListener('click',()=>{saveTipos(getTipos().filter(t=>t.id!==btn.dataset.deltipo));renderConfig()}));
+  document.querySelectorAll('[data-editcolor]').forEach(btn=>btn.addEventListener('click',()=>openEditColor(btn.dataset.editcolor)));
+  buildColorGrid('colorGrid','cTipoColor',document.getElementById('cTipoColor').value||'#c8f060');
+  // mark selected theme
+  const t=S.get('theme')||'dark';
+  document.querySelectorAll('.theme-opt').forEach(el=>el.classList.toggle('selected',el.dataset.themeOpt===t));
+}
+
+function openEditColor(tipoId){
+  const t=tipoById(tipoId);
+  document.getElementById('editColorTipoId').value=tipoId;
+  document.getElementById('editColorVal').value=t.color;
+  buildColorGrid('editColorGrid','editColorVal',t.color);
+  document.getElementById('modalEditColor').classList.remove('hidden');
+}
+document.getElementById('btnCancelEditColor').addEventListener('click',()=>document.getElementById('modalEditColor').classList.add('hidden'));
+document.getElementById('btnConfirmEditColor').addEventListener('click',()=>{
+  const tipoId=document.getElementById('editColorTipoId').value;
+  const color=document.getElementById('editColorVal').value;
+  const tipos=getTipos(),t=tipos.find(x=>x.id===tipoId);
+  if(t){t.color=color;saveTipos(tipos)}
+  document.getElementById('modalEditColor').classList.add('hidden');
+  renderConfig();
+});
+
+document.getElementById('btnAddTipo').addEventListener('click',()=>{
+  const name=document.getElementById('cTipoNombre').value.trim();
+  const color=document.getElementById('cTipoColor').value||'#c8f060';
+  if(!name)return;
+  const tipos=getTipos();tipos.push({id:uid(),name,color});saveTipos(tipos);
+  document.getElementById('cTipoNombre').value='';
+  renderConfig();
+});
+
+// ===== INIT =====
+renderInicio();
+renderFormSelects();
+</script>
+</body>
+</html>
