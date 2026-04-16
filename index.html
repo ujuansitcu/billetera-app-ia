@@ -36,26 +36,26 @@
   --danger:#e05060;--danger-bg:rgba(224,80,96,0.10);
   --success:#60a878;--tab-bg:#fff8f3;
 }
-
+ 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;overscroll-behavior:none;transition:background .25s,color .25s}
 .app{max-width:430px;margin:0 auto;min-height:100dvh;padding-bottom:calc(env(safe-area-inset-bottom)+20px)}
-
+ 
 /* TABS */
 .tabs{display:flex;background:var(--tab-bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .tab{flex:1;padding:14px 0;text-align:center;font-size:11px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;letter-spacing:.04em;text-transform:uppercase}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
-
+ 
 /* VIEWS */
 .view{display:none;padding:16px}
 .view.active{display:block}
-
+ 
 /* MONTH ROW */
 .month-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .month-btn{background:var(--surface2);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;color:var(--text);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity .15s}
 .month-btn:active{opacity:.6}
 .month-label{font-size:14px;color:var(--muted)}
-
+ 
 /* HERO FONDO */
 .hero{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:12px}
 .hero-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
@@ -68,13 +68,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .hero-fund-name{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px}
 .hero-total{font-size:11px;color:var(--muted)}
 .hero-total span{font-family:'DM Mono',monospace;color:var(--text)}
-
+ 
 /* METRICS */
 .metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
 .metric{background:var(--surface);border-radius:10px;padding:12px;border:1px solid var(--border)}
 .metric .ml{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
 .metric .mv{font-size:15px;font-weight:500}
-
+ 
 /* CHART */
 .chart-card{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:14px}
 .chart-inner{display:flex;align-items:center;gap:14px}
@@ -85,7 +85,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .l-name{flex:1;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .l-pct{font-family:'DM Mono',monospace;font-size:11px;color:var(--text)}
 .no-data{text-align:center;padding:24px 0;color:var(--muted);font-size:13px}
-
+ 
 /* DAY LIST */
 .day-group{margin-bottom:12px}
 .day-header{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:5px 0;border-bottom:1px solid var(--border);margin-bottom:6px;display:flex;justify-content:space-between}
@@ -100,7 +100,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .e-amount{font-family:'DM Mono',monospace;font-size:13px;color:var(--text);flex-shrink:0}
 .e-del{background:none;border:none;color:var(--muted2);font-size:18px;cursor:pointer;padding:1px 5px;border-radius:5px;line-height:1}
 .e-del:active{color:var(--danger);background:var(--danger-bg)}
-
+ 
 /* FORMS */
 .form-card{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:14px}
 .form-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:13px}
@@ -119,7 +119,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .form-error{font-size:12px;color:var(--danger);margin-top:7px;display:none}
 .divider{height:1px;background:var(--border);margin:14px 0}
 .section-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
-
+ 
 /* TIPOS LIST */
 .tipo-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
 .tipo-item:last-child{border-bottom:none}
@@ -129,20 +129,20 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .tipo-name-input:focus{border-bottom:1px solid var(--accent)}
 .tipo-del{background:none;border:none;color:var(--muted2);font-size:17px;cursor:pointer;padding:2px 5px}
 .tipo-del:active{color:var(--danger)}
-
+ 
 /* COLOR GRID */
 .color-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:6px}
 .color-opt{width:100%;aspect-ratio:1;border-radius:5px;cursor:pointer;border:2.5px solid transparent;transition:border-color .15s,transform .1s}
 .color-opt.selected{border-color:var(--text)}
 .color-opt:active{transform:scale(.9)}
-
+ 
 /* THEMES */
 .theme-row{display:flex;gap:8px;margin-bottom:4px}
 .theme-opt{flex:1;border-radius:10px;border:2px solid var(--border2);padding:10px 6px;text-align:center;cursor:pointer;font-size:12px;transition:border-color .15s,opacity .15s}
 .theme-opt.selected{border-color:var(--accent);color:var(--accent)}
 .theme-opt:active{opacity:.7}
 .theme-preview{width:100%;height:20px;border-radius:5px;margin-bottom:6px}
-
+ 
 /* MODAL SHEET */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:flex;align-items:flex-end;justify-content:center;transition:opacity .2s}
 .modal-overlay.hidden{display:none}
@@ -150,7 +150,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 16px}
 .modal h3{font-size:15px;font-weight:500;margin-bottom:14px}
 .modal-actions{display:flex;gap:8px;margin-top:12px}
-
+ 
 /* FONDO CARD IN MODAL */
 .fondo-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}
 .fondo-row:last-child{border-bottom:none}
@@ -171,7 +171,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
     <div class="tab" data-tab="agregar">+ Gasto</div>
     <div class="tab" data-tab="config">Config</div>
   </div>
-
+ 
   <!-- ===== INICIO ===== -->
   <div class="view active" id="tab-inicio">
     <div class="month-row">
@@ -179,7 +179,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
       <div class="month-label" id="monthLabel"></div>
       <button class="month-btn" id="nextM">&#8594;</button>
     </div>
-
+ 
     <!-- HERO FONDO -->
     <div class="hero">
       <div class="hero-top">
@@ -192,12 +192,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
         <div class="hero-total">total: <span id="heroTotalFondos">$0</span></div>
       </div>
     </div>
-
+ 
     <div class="metrics">
       <div class="metric"><div class="ml">gastado este mes</div><div class="mv" id="metGastado">$0</div></div>
       <div class="metric"><div class="ml">mayor tipo</div><div class="mv" id="metTop">—</div></div>
     </div>
-
+ 
     <div class="chart-card">
       <div class="chart-inner" id="chartInner">
         <div class="chart-wrap"><canvas id="pieChart" role="img" aria-label="Gráfico de torta por tipo de gasto"></canvas></div>
@@ -205,10 +205,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
       </div>
       <div class="no-data" id="noChart" style="display:none">Sin gastos este mes</div>
     </div>
-
+ 
     <div id="dayList"></div>
   </div>
-
+ 
   <!-- ===== AGREGAR GASTO ===== -->
   <div class="view" id="tab-agregar">
     <div class="form-card">
@@ -224,7 +224,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
       <button class="btn-primary" id="btnAdd">registrar gasto</button>
     </div>
   </div>
-
+ 
   <!-- ===== CONFIG ===== -->
   <div class="view" id="tab-config">
     <!-- TEMA -->
@@ -245,7 +245,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
         </div>
       </div>
     </div>
-
+ 
     <!-- TIPOS DE GASTO -->
     <div class="form-card">
       <div class="form-title">tipos de gasto</div>
@@ -258,7 +258,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
     </div>
   </div>
 </div>
-
+ 
 <!-- MODAL FONDOS -->
 <div class="modal-overlay hidden" id="modalFondos">
   <div class="modal">
@@ -269,7 +269,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
     <button class="btn-secondary" style="width:100%" id="btnNuevoFondo">+ nuevo fondo</button>
   </div>
 </div>
-
+ 
 <!-- MODAL NUEVO FONDO -->
 <div class="modal-overlay hidden" id="modalNuevoFondo">
   <div class="modal">
@@ -285,7 +285,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
     </div>
   </div>
 </div>
-
+ 
 <!-- MODAL INGRESO -->
 <div class="modal-overlay hidden" id="modalIngreso">
   <div class="modal">
@@ -300,7 +300,22 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
     </div>
   </div>
 </div>
-
+ 
+<!-- MODAL AJUSTAR SALDO -->
+<div class="modal-overlay hidden" id="modalAjustar">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 id="maTitle">ajustar saldo</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Esto sobreescribe el saldo directamente. No afecta el historial ni los porcentajes.</p>
+    <div class="field"><label>Nuevo saldo ($)</label><input type="number" id="maNuevoSaldo" placeholder="0" min="0" step="any" inputmode="decimal"/></div>
+    <div id="maError" class="form-error"></div>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="btnCancelAjustar">cancelar</button>
+      <button class="btn-primary" style="margin-top:0;flex:1" id="btnConfirmAjustar">aplicar</button>
+    </div>
+  </div>
+</div>
+ 
 <!-- MODAL EDITAR COLOR TIPO -->
 <div class="modal-overlay hidden" id="modalEditColor">
   <div class="modal">
@@ -315,18 +330,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
     </div>
   </div>
 </div>
-
+ 
 <script>
 // ===== STORAGE =====
 const S={get:k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
-
+ 
 // ===== STATE =====
 let now=new Date(),cy=now.getFullYear(),cm=now.getMonth(),chart=null,ingresoFondoId=null;
-
+ 
 const PALETTE=['#c8f060','#60d4f0','#f0a060','#f060a0','#a060f0','#60f0b8','#f0e060','#ff6b6b','#60a8f0','#f09060','#b060f0','#60f060','#f06080','#80f0c0','#f0c060','#6080f0','#50c8a0','#e8a030','#c060d0','#40b8e0'];
 const MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const DAYS=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
-
+ 
 // ===== DATA =====
 function getTipos(){return S.get('tipos')||[{id:'t1',name:'Comida',color:'#c8f060'},{id:'t2',name:'Transporte',color:'#60d4f0'},{id:'t3',name:'Vivienda',color:'#f0a060'},{id:'t4',name:'Salud',color:'#f060a0'},{id:'t5',name:'Entretenimiento',color:'#a060f0'},{id:'t6',name:'Otros',color:'#888'}]}
 function saveTipos(t){S.set('tipos',t)}
@@ -341,7 +356,7 @@ function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2
 function fmt(n){return Number(n).toLocaleString('es-AR',{minimumFractionDigits:0,maximumFractionDigits:0})}
 function tipoById(id){return getTipos().find(t=>t.id===id)||{name:id,color:'#888'}}
 function fondoById(id){return getFondos().find(f=>f.id===id)}
-
+ 
 // ===== THEME =====
 function applyTheme(t){
   document.documentElement.setAttribute('data-theme',t);
@@ -352,7 +367,7 @@ function applyTheme(t){
 }
 applyTheme(S.get('theme')||'dark');
 document.querySelectorAll('.theme-opt').forEach(el=>el.addEventListener('click',()=>applyTheme(el.dataset.themeOpt)));
-
+ 
 // ===== TABS =====
 document.querySelectorAll('.tab').forEach(tab=>{
   tab.addEventListener('click',()=>{
@@ -365,11 +380,11 @@ document.querySelectorAll('.tab').forEach(tab=>{
     if(tab.dataset.tab==='config')renderConfig();
   });
 });
-
+ 
 // ===== INICIO =====
 function renderInicio(){
   document.getElementById('monthLabel').textContent=`${MONTHS[cm]} ${cy}`;
-
+ 
   // Hero fondo
   const fondos=getFondos();
   const totalFondos=fondos.reduce((s,f)=>s+f.balance,0);
@@ -380,7 +395,7 @@ function renderInicio(){
   document.getElementById('heroLabel').textContent=fp?'fondo disponible':'dinero disponible';
   document.getElementById('heroFundName').innerHTML=fp?`<span>${fp.emoji||'💰'}</span> ${fp.name}`:'todos los fondos';
   document.getElementById('heroTotalFondos').textContent='$'+fmt(totalFondos);
-
+ 
   // Gastos
   const gastos=getGastos();
   const total=gastos.reduce((s,g)=>s+g.amount,0);
@@ -389,7 +404,7 @@ function renderInicio(){
   gastos.forEach(g=>{byTipo[g.tipoId]=(byTipo[g.tipoId]||0)+g.amount});
   const cats=Object.entries(byTipo).sort((a,b)=>b[1]-a[1]);
   document.getElementById('metTop').textContent=cats.length?tipoById(cats[0][0]).name:'—';
-
+ 
   // Chart
   const ci=document.getElementById('chartInner'),nc=document.getElementById('noChart');
   if(cats.length){
@@ -400,7 +415,7 @@ function renderInicio(){
       return `<div class="legend-item"><span class="l-dot" style="background:${t.color}"></span><span class="l-name">${t.name}</span><span class="l-pct">${total>0?Math.round(amt/total*100):0}%</span></div>`;
     }).join('');
   }else{ci.style.display='none';nc.style.display='block';if(chart){chart.destroy();chart=null}}
-
+ 
   // Day list
   const byDay={};
   gastos.forEach(g=>{const d=(g.date||new Date().toISOString()).slice(0,10);if(!byDay[d])byDay[d]=[];byDay[d].push(g)});
@@ -431,13 +446,13 @@ function renderInicio(){
   }).join('');
   listEl.querySelectorAll('.e-del').forEach(btn=>btn.addEventListener('click',()=>deleteGasto(btn.dataset.id)));
 }
-
+ 
 function renderChart(cats,total){
   const ctx=document.getElementById('pieChart').getContext('2d');
   if(chart)chart.destroy();
   chart=new Chart(ctx,{type:'doughnut',data:{labels:cats.map(c=>tipoById(c[0]).name),datasets:[{data:cats.map(c=>c[1]),backgroundColor:cats.map(c=>tipoById(c[0]).color),borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'66%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`$${fmt(c.parsed)} (${total>0?Math.round(c.parsed/total*100):0}%)`}}}}});
 }
-
+ 
 function deleteGasto(id){
   const gastos=getGastos(),g=gastos.find(x=>x.id===id);
   if(!g)return;
@@ -445,14 +460,14 @@ function deleteGasto(id){
   saveGastos(gastos.filter(x=>x.id!==id));
   renderInicio();
 }
-
+ 
 document.getElementById('prevM').addEventListener('click',()=>{cm--;if(cm<0){cm=11;cy--}renderInicio()});
 document.getElementById('nextM').addEventListener('click',()=>{cm++;if(cm>11){cm=0;cy++}renderInicio()});
-
+ 
 // ===== MODAL FONDOS =====
 document.getElementById('btnVerFondos').addEventListener('click',()=>{renderFondosModal();document.getElementById('modalFondos').classList.remove('hidden')});
 document.getElementById('modalFondos').addEventListener('click',e=>{if(e.target===document.getElementById('modalFondos'))document.getElementById('modalFondos').classList.add('hidden')});
-
+ 
 function renderFondosModal(){
   const fondos=getFondos();
   const fpId=getFondoPrincipalId();
@@ -466,14 +481,16 @@ function renderFondosModal(){
       <div class="fondo-actions">
         <button class="fondo-principal-btn${f.id===fpId?' active':''}" data-setprincipal="${f.id}">${f.id===fpId?'★ principal':'principal'}</button>
         <button class="btn-secondary" style="font-size:11px;padding:5px 8px" data-ingresofondo="${f.id}">+ ingreso</button>
+        <button class="btn-secondary" style="font-size:11px;padding:5px 8px" data-ajustarfondo="${f.id}" data-ajustarsaldo="${f.balance}">editar saldo</button>
         <button class="btn-danger-sm" data-delfondo="${f.id}">×</button>
       </div>
     </div>`).join(''):'<div class="no-data">No tenés fondos</div>';
+  document.querySelectorAll('[data-ajustarfondo]').forEach(btn=>btn.addEventListener('click',()=>openModalAjustar(btn.dataset.ajustarfondo,btn.dataset.ajustarsaldo)));
   document.querySelectorAll('[data-setprincipal]').forEach(btn=>btn.addEventListener('click',()=>{setFondoPrincipalId(btn.dataset.setprincipal);renderFondosModal();renderInicio()}));
   document.querySelectorAll('[data-ingresofondo]').forEach(btn=>btn.addEventListener('click',()=>{ingresoFondoId=btn.dataset.ingresofondo;openModalIngreso(btn.dataset.ingresofondo)}));
   document.querySelectorAll('[data-delfondo]').forEach(btn=>btn.addEventListener('click',()=>{saveFondos(getFondos().filter(f=>f.id!==btn.dataset.delfondo));renderFondosModal();renderInicio()}));
 }
-
+ 
 document.getElementById('btnNuevoFondo').addEventListener('click',()=>{
   ['mfNombre','mfEmoji','mfSaldo'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('mfError').style.display='none';
@@ -496,7 +513,29 @@ document.getElementById('btnConfirmFondo').addEventListener('click',()=>{
   document.getElementById('modalFondos').classList.remove('hidden');
   renderFondosModal();renderInicio();
 });
-
+ 
+let ajustarFondoId=null;
+function openModalAjustar(fondoId,saldoActual){
+  ajustarFondoId=fondoId;
+  const f=fondoById(fondoId);
+  document.getElementById('maTitle').textContent=`ajustar saldo — ${f?f.name:'fondo'}`;
+  document.getElementById('maNuevoSaldo').value=saldoActual||'';
+  document.getElementById('maError').style.display='none';
+  document.getElementById('modalFondos').classList.add('hidden');
+  document.getElementById('modalAjustar').classList.remove('hidden');
+}
+document.getElementById('btnCancelAjustar').addEventListener('click',()=>{document.getElementById('modalAjustar').classList.add('hidden');document.getElementById('modalFondos').classList.remove('hidden');renderFondosModal()});
+document.getElementById('btnConfirmAjustar').addEventListener('click',()=>{
+  const nuevoSaldo=parseFloat(document.getElementById('maNuevoSaldo').value);
+  const errEl=document.getElementById('maError');
+  if(isNaN(nuevoSaldo)||nuevoSaldo<0){errEl.textContent='Ingresá un saldo válido.';errEl.style.display='block';return}
+  const fondos=getFondos(),f=fondos.find(x=>x.id===ajustarFondoId);
+  if(f){f.balance=nuevoSaldo;saveFondos(fondos)}
+  document.getElementById('modalAjustar').classList.add('hidden');
+  document.getElementById('modalFondos').classList.remove('hidden');
+  renderFondosModal();renderInicio();
+});
+ 
 function openModalIngreso(fondoId){
   const f=fondoById(fondoId);
   document.getElementById('miTitle').textContent=`agregar a ${f?f.name:'fondo'}`;
@@ -517,7 +556,7 @@ document.getElementById('btnConfirmIngreso').addEventListener('click',()=>{
   document.getElementById('modalFondos').classList.remove('hidden');
   renderFondosModal();renderInicio();
 });
-
+ 
 // ===== AGREGAR GASTO =====
 function renderFormSelects(){
   const tipos=getTipos(),fondos=getFondos();
@@ -556,13 +595,13 @@ document.getElementById('btnAdd').addEventListener('click',()=>{
   document.getElementById('tab-inicio').classList.add('active');
   renderInicio();
 });
-
+ 
 // ===== CONFIG =====
 function buildColorGrid(gridId,hiddenId,currentColor){
   document.getElementById(gridId).innerHTML=PALETTE.map(c=>`<div class="color-opt${c===currentColor?' selected':''}" style="background:${c}" data-color="${c}"></div>`).join('');
   document.querySelectorAll('#'+gridId+' .color-opt').forEach(el=>el.addEventListener('click',()=>{document.getElementById(hiddenId).value=el.dataset.color;document.querySelectorAll('#'+gridId+' .color-opt').forEach(x=>x.classList.remove('selected'));el.classList.add('selected')}));
 }
-
+ 
 function renderConfig(){
   const tipos=getTipos();
   document.getElementById('tiposList').innerHTML=tipos.map(t=>`
@@ -581,7 +620,7 @@ function renderConfig(){
   const t=S.get('theme')||'dark';
   document.querySelectorAll('.theme-opt').forEach(el=>el.classList.toggle('selected',el.dataset.themeOpt===t));
 }
-
+ 
 function openEditColor(tipoId){
   const t=tipoById(tipoId);
   document.getElementById('editColorTipoId').value=tipoId;
@@ -598,7 +637,7 @@ document.getElementById('btnConfirmEditColor').addEventListener('click',()=>{
   document.getElementById('modalEditColor').classList.add('hidden');
   renderConfig();
 });
-
+ 
 document.getElementById('btnAddTipo').addEventListener('click',()=>{
   const name=document.getElementById('cTipoNombre').value.trim();
   const color=document.getElementById('cTipoColor').value||'#c8f060';
@@ -607,7 +646,7 @@ document.getElementById('btnAddTipo').addEventListener('click',()=>{
   document.getElementById('cTipoNombre').value='';
   renderConfig();
 });
-
+ 
 // ===== INIT =====
 renderInicio();
 renderFormSelects();
